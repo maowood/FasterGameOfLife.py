@@ -1,6 +1,7 @@
 import pygame
 import numpy as np
 from numpy.fft import fft2, ifft2
+import time
 
 
 pygame.init()
@@ -20,6 +21,10 @@ KERNEL_FFT = fft2(KERNEL, s=BOARD_SHAPE)
 board = np.random.randint(2, size=BOARD_SHAPE)
 board[..., :BOARD_SHAPE[1]//3] = 0
 board[..., BOARD_SHAPE[1]//3*2:] = 0
+
+# 初始化时间戳，用于FPS统计
+prev_time = time.time()
+num_frame = 0
 
 # 游戏循环
 while True:
@@ -61,3 +66,11 @@ while True:
 
     # 刷新屏幕
     pygame.display.flip()
+
+    # 显示FPS
+    if time.time() - prev_time < 1:
+        num_frame += 1
+    else:
+        print(f"FPS: {num_frame}")
+        num_frame = 0
+        prev_time += 1
